@@ -155,7 +155,7 @@ class InstitutionsTable extends ControllerActionTable
         // specify order of advanced search fields
         $advancedSearchFieldOrder = [
             'shift_type', 'classification', 'area_id', 'area_administrative_id', 'institution_locality_id', 'institution_type_id',
-            'institution_ownership_id', 'institution_status_id', 'institution_sector_id', 'institution_provider_id', 'institution_gender_id', 'education_programmes',
+            'institution_ownership_id', 'institution_status_id', 'institution_sector_id', 'institution_provider_id', 'institution_84_id', 'education_programmes',
             'code', 'name',
         ];
         $this->addBehavior('AdvanceSearch', [
@@ -746,6 +746,9 @@ class InstitutionsTable extends ControllerActionTable
         $query->contain($extra['query']['contain']);
         $query->select($extra['query']['select']);
 
+        if($this->request['data']['AdvanceSearch']["Institutions"]['belongsTo']["institution_status_id"]==""){
+            $query->where([$this->aliasField('institution_status_id') => 1 ]);
+        }
         // POCOR-3983 if no sort, active status will be followed by inactive status
         if (!isset($this->request->query['sort'])) {
             $query->order([

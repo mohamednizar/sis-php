@@ -88,11 +88,9 @@ return [
             'path' => CACHE,
             'url' => env('CACHE_DEFAULT_URL', null),
         ],
-
         /**
          * Configure the cache used for general framework caching.
          * Translation cache files are stored with this configuration.
-         * Duration will be set to '+1 year' in bootstrap.php when debug = false
          */
         '_cake_core_' => [
             'className' => 'File',
@@ -107,7 +105,6 @@ return [
          * Configure the cache for model and datasource caches. This cache
          * configuration is used to store schema descriptions, and table listings
          * in connections.
-         * Duration will be set to '+1 year' in bootstrap.php when debug = false
          */
         '_cake_model_' => [
             'className' => 'File',
@@ -284,13 +281,13 @@ return [
      * Configures logging options
      */
     'Log' => [
-        'debug' => [
-            'className' => 'Cake\Log\Engine\FileLog',
-            'path' => LOGS,
-            'file' => 'debug',
-            'levels' => [ 'debug'],
-            'url' => env('LOG_DEBUG_URL', null),
-        ],
+        // 'debug' => [
+        //     'className' => 'Cake\Log\Engine\FileLog',
+        //     'path' => LOGS,
+        //     'file' => 'debug',
+        //     'levels' => [ 'debug'],
+        //     'url' => env('LOG_DEBUG_URL', null),
+        // ],
         'error' => [
             'className' => 'Cake\Log\Engine\FileLog',
             'path' => LOGS,
@@ -340,5 +337,8 @@ return [
      */
     'Session' => [
         'defaults' => 'php',
-    ]
+//         'defaults' => 'cache',
+    ],
+    'debug' => true
+
 ];

@@ -44,6 +44,11 @@ class StudentAdmissionTable extends ControllerActionTable
     {
         $this->table('institution_student_admission');
 
+        $this->addBehavior('Muffin/Trash.Trash', [
+            'field' => 'deleted_at',
+            'events' => ['Model.beforeFind']
+        ]);
+
         parent::initialize($config);
         $this->belongsTo('Users', ['className' => 'User.Users', 'foreignKey' => 'student_id']);
         $this->belongsTo('Statuses', ['className' => 'Workflow.WorkflowSteps', 'foreignKey' => 'status_id']);
@@ -125,9 +130,9 @@ class StudentAdmissionTable extends ControllerActionTable
                     'rule' => ['maxLength', 12],
                     'message' => 'Admission number must be of 12 characters long',
                 ],
-                'ruleNumeric' => [
-                    'rule' => ['numeric'],
-                    'message' => 'Admission number can only contain numbers',
+                'validNumber' => [
+                    'rule' => array('custom', '/^[A-Za-z0-9\/]+$/'),
+                    'message' => 'Must contain letters , numbers and "/" only '
                 ],
                 'ruleNotEmpty' => [
                     'rule' => ['notEmpty'],
@@ -138,12 +143,13 @@ class StudentAdmissionTable extends ControllerActionTable
                 'rule' => ['compareStudentGenderWithInstitution'],
                 'on' => 'create',
             ])
+
             ->add('education_grade_id', 'ruleCheckProgrammeEndDate', [
                 'rule' => ['checkProgrammeEndDate', 'education_grade_id'],
             ])
             ->allowEmpty('institution_class_id')
-            ->add('institution_class_id', 'ruleClassMaxLimit', [
-                'rule' => ['checkInstitutionClassMaxLimit'],
+            ->add('institution_class_id', 'ruleCheckMaxStudentsPerClass', [
+                'rule' => ['checkMaxStudentsPerClass']
             ]);
 
         return $validator;
